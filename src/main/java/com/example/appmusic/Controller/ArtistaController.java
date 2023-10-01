@@ -1,7 +1,7 @@
 package com.example.appmusic.Controller;
 
-import com.br.musicapp.Entity.Artista;
-import com.br.musicapp.Repository.ArtistaRepository;
+import com.example.appmusic.Entity.Artista;
+import com.example.appmusic.Repository.ArtistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
