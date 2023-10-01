@@ -1,31 +1,44 @@
 package com.example.appmusic.Entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.io.Serializable;
-import java.util.Set;
-
-@Data
-@Builder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name ="tb_artist")
-public class Artista implements Serializable {
-
-    private static final long serialVersionUID =1L;
+public class Artista {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     private String nome;
 
     private String genero;
 
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id){
+        this.id = id;
+    }
 
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
 }

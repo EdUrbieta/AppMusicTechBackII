@@ -1,40 +1,29 @@
 package com.example.appmusic.Controller;
 
 import com.example.appmusic.Entity.Album;
-import com.example.appmusic.Repository.AlbumRepository;
+import com.example.appmusic.Repository.AlbumRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
-@RequestMapping("api/user")
+@Controller
+@RequestMapping(path="/album")
 public class AlbumController {
 
     @Autowired
-    private AlbumRepository albumRepository;
+    private AlbumRepo albumRepo;
 
-    @GetMapping
-    public List<Album> findAllAlbum() {
-        return albumRepository.findAll();
+    @PostMapping(path="/add")
+    public @ResponseBody String addNewAlbum (@RequestParam String nome, @RequestParam Double duracao) {
+        Album n = new Album();
+        n.setNome(nome);
+        n.setDuracao(duracao);
+        albumRepo.save(n);
+        return "Saved";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Album> findAlbumById(@PathVariable(value = "id") long id) {
-        Optional<Album> album = albumRepository.findAllById(id);
-
-        if(album.isPresent()) {
-            return ResponseEntity.ok().body(album.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping
-    public Album saveAlbum (@Validated @RequestBody Album album) {
-        return albumRepository.save(album);
+    @GetMapping(path = "/all")
+    public @ResponseBody Iterable<Album> getAllAlbums() {
+        return albumRepo.findAll();
     }
 }

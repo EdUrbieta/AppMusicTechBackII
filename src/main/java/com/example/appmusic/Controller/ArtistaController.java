@@ -1,41 +1,29 @@
 package com.example.appmusic.Controller;
 
 import com.example.appmusic.Entity.Artista;
-import com.example.appmusic.Repository.ArtistaRepository;
+import com.example.appmusic.Repository.ArtistaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
-@RequestMapping("api/user")
+@Controller
+@RequestMapping(path="/artista")
 public class ArtistaController {
 
     @Autowired
-    private ArtistaRepository artistaRepository;
+    private ArtistaRepo artistaRepo;
 
-    @GetMapping
-    public List<Artista> findAllArtista() {
-        return artistaRepository.findAll();
+    @PostMapping(path = "/add")
+    public @ResponseBody String addNewArtista (@RequestParam String nome, @RequestParam String genero) {
+        Artista n = new Artista();
+        n.setNome(nome);
+        n.setGenero(genero);
+        artistaRepo.save(n);
+        return "Saved";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Artista> findArtistasById(@PathVariable(value = "id") long id) {
-        Optional<Artista> artista = artistaRepository.findAllById(id);
-
-        if(artista.isPresent()) {
-            return ResponseEntity.ok().body(artista.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping
-    public Artista saveArtista (@Validated @RequestBody Artista artista) {
-        return artistaRepository.save(artista);
+    @GetMapping(path = "/all")
+    public @ResponseBody Iterable<Artista> getAllArtistas() {
+        return artistaRepo.findAll();
     }
 }
-

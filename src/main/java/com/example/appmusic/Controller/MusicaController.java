@@ -1,40 +1,30 @@
 package com.example.appmusic.Controller;
 
 import com.example.appmusic.Entity.Musica;
-import com.example.appmusic.Repository.MusicaRepository;
+import com.example.appmusic.Repository.MusicaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
-@RequestMapping("api/user")
+@Controller
+@RequestMapping(path = "/musica")
 public class MusicaController {
 
     @Autowired
-    private MusicaRepository musicaRepository;
+    private MusicaRepo musicaRepo;
 
-    @GetMapping
-    public List<Musica> findAllMusicas() {
-        return musicaRepository.findAll();
+    @PostMapping(path = "/add")
+    public @ResponseBody String addNewMusic (@RequestParam String nome, @RequestParam Double duracao, @RequestParam String letra) {
+        Musica n = new Musica();
+        n.setNome(nome);
+        n.setDuracao(duracao);
+        n.setLetra(letra);
+        musicaRepo.save(n);
+        return "Saved";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Musica> findMusicaById(@PathVariable(value = "id") long id) {
-        Optional<Musica> musica = musicaRepository.findAllById(id);
-
-        if (musica.isPresent()) {
-            return ResponseEntity.ok().body(musica.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping
-    public Musica saveMusica (@Validated @RequestBody Musica musica) {
-        return musicaRepository.save(musica);
+    @GetMapping(path = "/all")
+    public @ResponseBody Iterable<Musica> getAllMusicas() {
+        return musicaRepo.findAll();
     }
 }
